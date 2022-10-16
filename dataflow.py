@@ -7,7 +7,8 @@ class File():
 
     def get_domains(self):
         return self.data["domains"]
-
-    def save_results(self, results, path="results.xlsx"):
-        self.data["results"] = pd.Series(results)
-        self.data.to_excel(path, index=False)
+    
+    @staticmethod
+    def save_results(results, path="results.xlsx"):
+        new_file = pd.DataFrame(list(results.items()))
+        new_file.to_excel(path, index=False)

@@ -44,17 +44,18 @@ def search_domain(domain):
         search_domain(domain)
 
 def search_domains(domains):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+    results = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         future_to_url = {executor.submit(search_domain, domain): domain for domain in domains}
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             print(f"url {url}")
             try:
                 data = future.result()
-                print(f"data: {data}")
+                results[url] = data
             except Exception as exc:
                 print('%r generated an exception: %s' % (url, exc))
-
+    return results
 
 
 if __name__ == "__main__":
